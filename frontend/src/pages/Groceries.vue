@@ -313,7 +313,7 @@ export default {
       if (!this.householdCode) return
       this.isLoading = true
       try {
-        const res = await axios.get('http://localhost:5000/api/groceries', {
+        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/groceries', {
           params: { householdCode: this.householdCode },
         })
         this.groceries = res.data || []
@@ -328,9 +328,12 @@ export default {
       if (!this.householdCode) return
       this.isLoadingHistory = true
       try {
-        const res = await axios.get('http://localhost:5000/api/groceries/history', {
-          params: { householdCode: this.householdCode, limit: 50 },
-        })
+        const res = await axios.get(
+          ' https://cozyshare-backend.onrender.com/api/groceries/history',
+          {
+            params: { householdCode: this.householdCode, limit: 50 },
+          },
+        )
         this.history = res.data || []
       } catch (err) {
         console.error('Fetch grocery history error', err)
@@ -377,7 +380,7 @@ export default {
           addedBy: this.currentUser.name || this.currentUser.email,
         }
 
-        const res = await axios.post('http://localhost:5000/api/groceries', body)
+        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/groceries', body)
         this.groceries.push(res.data)
 
         this.closeModal()
@@ -421,9 +424,12 @@ export default {
       const wasPurchased = !!before?.isPurchased
 
       try {
-        const res = await axios.patch(`http://localhost:5000/api/groceries/${id}/toggle`, {
-          currentUser: this.currentUser.name || this.currentUser.email,
-        })
+        const res = await axios.patch(
+          ` https://cozyshare-backend.onrender.com/api/groceries/${id}/toggle`,
+          {
+            currentUser: this.currentUser.name || this.currentUser.email,
+          },
+        )
 
         const updated = res.data
 
@@ -446,7 +452,7 @@ export default {
       }
 
       try {
-        await axios.delete(`http://localhost:5000/api/groceries/${id}`)
+        await axios.delete(` https://cozyshare-backend.onrender.com/api/groceries/${id}`)
         this.groceries = this.groceries.filter((g) => g._id !== id)
       } catch (err) {
         console.error('Delete grocery error', err)

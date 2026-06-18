@@ -444,7 +444,7 @@ export default {
       if (!this.householdCode) return
       this.isLoading = true
       try {
-        const res = await axios.get('http://localhost:5000/api/chores', {
+        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/chores', {
           params: { householdCode: this.householdCode },
         })
         this.allChores = res.data || []
@@ -494,7 +494,7 @@ export default {
           createdBy: this.currentUser,
         }
 
-        const res = await axios.post('http://localhost:5000/api/chores', body)
+        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/chores', body)
         this.allChores.push(res.data)
         this.closeModal()
         this.showToast('Chore added successfully!', 'success')
@@ -521,9 +521,12 @@ export default {
       if (!this.canMarkChore(chore)) return
 
       try {
-        const res = await axios.patch(`http://localhost:5000/api/chores/${chore._id}/complete`, {
-          currentUser: this.currentUser,
-        })
+        const res = await axios.patch(
+          ` https://cozyshare-backend.onrender.com/api/chores/${chore._id}/complete`,
+          {
+            currentUser: this.currentUser,
+          },
+        )
 
         const updated = res.data.chore || res.data
 
@@ -561,9 +564,12 @@ export default {
       if (!chore || !chore.completed) return
 
       try {
-        const res = await axios.patch(`http://localhost:5000/api/chores/${choreId}/complete`, {
-          currentUser: this.currentUser,
-        })
+        const res = await axios.patch(
+          ` https://cozyshare-backend.onrender.com/api/chores/${choreId}/complete`,
+          {
+            currentUser: this.currentUser,
+          },
+        )
 
         const updated = res.data.chore || res.data
 

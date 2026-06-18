@@ -165,7 +165,7 @@ export default {
       }
 
       try {
-        const res = await axios.post('http://localhost:5000/api/auth/login', {
+        const res = await axios.post('https://cozyshare-backend.onrender.com/api/auth/login', {
           email: this.email,
           password: this.password,
         })
@@ -238,7 +238,10 @@ export default {
           inviteCode: this.householdMode === 'join' ? this.inviteCode.trim() : undefined,
         }
 
-        const res = await axios.post('http://localhost:5000/api/auth/register', body)
+        const res = await axios.post(
+          'https://cozyshare-backend.onrender.com/api/auth/register',
+          body,
+        )
 
         const raw = res.data
         const codeFromBackend = raw.householdCode || raw.user?.householdCode || null

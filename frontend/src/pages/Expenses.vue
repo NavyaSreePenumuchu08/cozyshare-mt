@@ -484,7 +484,7 @@ export default {
       if (!this.householdCode) return
       this.isLoading = true
       try {
-        const res = await axios.get('http://localhost:5000/api/expenses', {
+        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/expenses', {
           params: { householdCode: this.householdCode },
         })
         this.expenses = res.data || []
@@ -499,7 +499,7 @@ export default {
 
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/households/${this.householdCode}/members`,
+          ` https://cozyshare-backend.onrender.com/api/households/${this.householdCode}/members`,
         )
 
         this.houseMembers = (res.data || []).map((member) => member.name || member)
@@ -514,7 +514,7 @@ export default {
     async fetchSettlements() {
       if (!this.householdCode) return
       try {
-        const res = await axios.get('http://localhost:5000/api/settlements', {
+        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/settlements', {
           params: { householdCode: this.householdCode },
         })
         this.settlementRecords = res.data || []
@@ -582,7 +582,7 @@ export default {
           dueDate: this.form.dueDate || null,
           householdCode: this.householdCode,
         }
-        const res = await axios.post('http://localhost:5000/api/expenses', body)
+        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/expenses', body)
         this.expenses.unshift(res.data)
         this.closeModal()
         this.showToast('Bill added successfully!', 'success')
@@ -596,7 +596,7 @@ export default {
 
     async deleteExpense(id) {
       try {
-        await axios.delete(`http://localhost:5000/api/expenses/${id}`)
+        await axios.delete(` https://cozyshare-backend.onrender.com/api/expenses/${id}`)
         this.expenses = this.expenses.filter((exp) => exp._id !== id)
         this.showToast('Bill deleted successfully', 'info')
         this.fetchHouseholdMembers()
@@ -612,7 +612,7 @@ export default {
       if (!settlement) return
 
       try {
-        await axios.post('http://localhost:5000/api/settlements', {
+        await axios.post(' https://cozyshare-backend.onrender.com/api/settlements', {
           householdCode: this.householdCode,
           from: settlement.from,
           to: settlement.to,
@@ -636,7 +636,9 @@ export default {
     // UPDATED: undo settlement in backend
     async undoPayment(settlementMongoId) {
       try {
-        await axios.delete(`http://localhost:5000/api/settlements/${settlementMongoId}`)
+        await axios.delete(
+          ` https://cozyshare-backend.onrender.com/api/settlements/${settlementMongoId}`,
+        )
         await this.fetchSettlements()
         this.showToast('Settlement undone', 'info')
       } catch (err) {
