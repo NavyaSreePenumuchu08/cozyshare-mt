@@ -19,7 +19,7 @@
           <h3>My Chores</h3>
           <span class="count-badge">{{ myChoresThisWeek.length }}</span>
         </div>
-        <p class="small-subtitle">Created by you or assigned to you this week</p>
+        <p class="small-subtitle">Chores assigned to you this week.</p>
 
         <div v-if="myChoresThisWeek.length === 0" class="empty-state">
           <span class="empty-emoji">🎉</span>

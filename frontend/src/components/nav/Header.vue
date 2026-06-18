@@ -27,6 +27,7 @@
     <div class="header__actions">
       <div v-if="isLoggedIn" class="user-info">
         <span class="welcome">Hi, {{ userName || 'Roomie' }} </span>
+        <span v-if="householdName" > Name:{{ householdName }} </span>
         <span v-if="householdCode" class="household-chip"> Code: {{ householdCode }} </span>
       </div>
       <button v-if="isLoggedIn" class="btn btn-light" @click="logout">Logout</button>
@@ -43,6 +44,9 @@ export default {
     },
     userName() {
       return this.$store.getters.userName
+    },
+    householdName() {
+      return this.$store.getters.householdName
     },
     householdCode() {
       return this.$store.getters.householdCode
