@@ -21,6 +21,9 @@
         <li>
           <router-link to="/expenses" active-class="active">Expenses</router-link>
         </li>
+        <li>
+          <router-link to="/ai-assistant" active-class="active">AI Assistant</router-link>
+        </li>
       </ul>
     </nav>
 

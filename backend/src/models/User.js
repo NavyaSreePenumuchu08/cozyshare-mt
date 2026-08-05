@@ -21,6 +21,23 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: null,
 		},
+		taskPreferences: {
+  type: [String],
+  enum: [
+    'Kitchen',
+    'Laundry',
+    'Cleaning',
+    'Bathroom',
+    'Gardening',
+    'Groceries',
+    'Maintenance',
+    'Bills',
+    'Bedroom',
+    'Pet Care',
+    'General',
+  ],
+  default: [],
+},
 	},
 	{ timestamps: true },
 );

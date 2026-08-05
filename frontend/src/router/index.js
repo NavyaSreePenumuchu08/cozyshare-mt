@@ -7,6 +7,7 @@ import Chores from '../pages/chores.vue'
 import Groceries from '../pages/Groceries.vue'
 import Expenses from '../pages/Expenses.vue'
 import Login from '../pages/Login.vue'
+import AIAssistant from "../pages/AIAssistant.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -35,6 +36,11 @@ const router = createRouter({
     },
     // 404 fallback
     { path: '/:notFound(.*)', redirect: '/' },
+    {
+      path: "/ai-assistant",
+      name: "AIAssistant",
+      component: AIAssistant
+   },
   ],
 })
 

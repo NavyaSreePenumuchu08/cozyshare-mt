@@ -24,6 +24,27 @@ const choreSchema = new mongoose.Schema(
 			default: "once",
 		},
 
+		location: {
+  type: String,
+  default: "General"
+},
+
+priority: {
+  type: String,
+  enum: ["Low", "Medium", "High"],
+  default: "Medium"
+},
+
+priorityReason: {
+  type: String,
+  default: ""
+},
+
+source: {
+  type: String,
+  default: "Manual"
+},
+
 		// completion info
 		completed: { type: Boolean, default: false },
 		completedAt: { type: Date },

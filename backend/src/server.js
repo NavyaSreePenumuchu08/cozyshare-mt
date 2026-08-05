@@ -12,6 +12,7 @@ const groceryRoutes = require("./routes/groceryRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const householdRoutes = require("./routes/householdRoutes");
 const settlementRoutes = require("./routes/settlementRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/groceries", groceryRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/households", householdRoutes);
 app.use("/api/settlements", settlementRoutes);
+app.use("/api/ai", aiRoutes);
 
 // root route
 app.get("/", (req, res) => {

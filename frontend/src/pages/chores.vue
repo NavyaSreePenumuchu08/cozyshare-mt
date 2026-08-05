@@ -296,6 +296,10 @@ export default {
       toastMessage: '',
       toastType: 'success',
 
+      suggestedAssignee: '',
+      assignmentReason: '',
+      assigning: false,
+
       houseMembers: [],
 
       title: '',
