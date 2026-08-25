@@ -13,6 +13,7 @@ const expenseRoutes = require("./routes/expenseRoutes");
 const householdRoutes = require("./routes/householdRoutes");
 const settlementRoutes = require("./routes/settlementRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const visionRoutes = require('./routes/visionRoutes');
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/api/expenses", expenseRoutes);
 app.use("/api/households", householdRoutes);
 app.use("/api/settlements", settlementRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/vision", visionRoutes);
 
 // root route
 app.get("/", (req, res) => {

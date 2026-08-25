@@ -29,21 +29,12 @@
           ></textarea>
         </div>
 
-        <p v-if="message" class="error-msg">
-          <span class="error-icon">⚠️</span> {{ message }}
-        </p>
+        <p v-if="message" class="error-msg"><span class="error-icon">⚠️</span> {{ message }}</p>
 
         <div class="form-actions">
-          <button type="button" class="btn-secondary" @click="clearAssistant">
-            Clear
-          </button>
+          <button type="button" class="btn-secondary" @click="clearAssistant">Clear</button>
 
-          <button
-            type="button"
-            class="btn-primary"
-            :disabled="loading"
-            @click="suggestTask"
-          >
+          <button type="button" class="btn-primary" :disabled="loading" @click="suggestTask">
             <span class="btn-icon">✨</span>
             {{ loading ? 'Thinking...' : 'Suggest Task' }}
           </button>
@@ -59,9 +50,7 @@
         <div v-if="!suggestion" class="empty-state">
           <span class="empty-emoji">🤖</span>
           <p>No suggestion yet</p>
-          <span class="empty-note">
-            Enter a situation and let CozyShare suggest a chore.
-          </span>
+          <span class="empty-note"> Enter a situation and let CozyShare suggest a chore. </span>
         </div>
 
         <div v-else class="suggestion-box">
@@ -81,8 +70,18 @@
           </div>
 
           <div class="detail-row">
+            <span class="detail-label">Category:</span>
+
+            <span class="detail-value">
+              {{ suggestion.category || 'General' }}
+            </span>
+          </div>
+
+          <div class="detail-row">
             <span class="detail-label">Priority Reason:</span>
-            <span class="detail-value">{{ suggestion.priorityReason || 'No reason generated.' }}</span>
+            <span class="detail-value">{{
+              suggestion.priorityReason || 'No reason generated.'
+            }}</span>
           </div>
 
           <div class="detail-row">
@@ -91,48 +90,35 @@
           </div>
 
           <div v-if="suggestedAssignee" class="detail-row">
-  <span class="detail-label">Assigned to:</span>
-  <span class="detail-value">
-    👤 {{ suggestedAssignee }}
-  </span>
-</div>
+            <span class="detail-label">Assigned to:</span>
+            <span class="detail-value"> 👤 {{ suggestedAssignee }} </span>
+          </div>
 
-<div v-if="assignmentReason" class="detail-row">
-  <span class="detail-label">Assignment reason:</span>
-  <span class="detail-value">
-    {{ assignmentReason }}
-  </span>
-</div>
+          <div v-if="assignmentReason" class="detail-row">
+            <span class="detail-label">Assignment reason:</span>
+            <span class="detail-value">
+              {{ assignmentReason }}
+            </span>
+          </div>
 
           <div class="form-actions assignment-actions">
-  <button
-    type="button"
-    class="btn-secondary"
-    :disabled="assigning"
-    @click="suggestAssignee"
-  >
-    <span class="btn-icon">🤖</span>
-    {{ assigning ? 'Analysing...' : 'Suggest Assignee' }}
-  </button>
+            <button
+              type="button"
+              class="btn-secondary"
+              :disabled="assigning"
+              @click="suggestAssignee"
+            >
+              <span class="btn-icon">🤖</span>
+              {{ assigning ? 'Analysing...' : 'Suggest Assignee' }}
+            </button>
 
-  <button
-    type="button"
-    class="btn-secondary"
-    @click="dismissSuggestion"
-  >
-    Dismiss
-  </button>
+            <button type="button" class="btn-secondary" @click="dismissSuggestion">Dismiss</button>
 
-  <button
-    type="button"
-    class="btn-primary"
-    :disabled="saving"
-    @click="createChore"
-  >
-    <span class="btn-icon">+</span>
-    {{ saving ? 'Adding...' : 'Add to Chores' }}
-  </button>
-</div>
+            <button type="button" class="btn-primary" :disabled="saving" @click="createChore">
+              <span class="btn-icon">+</span>
+              {{ saving ? 'Adding...' : 'Add to Chores' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -155,22 +141,22 @@ export default {
   name: 'AIAssistant',
 
   data() {
-  return {
-    description: '',
-    suggestion: null,
-    loading: false,
-    saving: false,
-    message: '',
-    toastMessage: '',
-    toastType: 'success',
+    return {
+      description: '',
+      suggestion: null,
+      loading: false,
+      saving: false,
+      message: '',
+      toastMessage: '',
+      toastType: 'success',
 
-    suggestedAssignee: '',
-assignmentReason: '',
-assignmentWorkload: {},
-assigning: false,
-houseMembers: [],
-  }
-},
+      suggestedAssignee: '',
+      assignmentReason: '',
+      assignmentWorkload: {},
+      assigning: false,
+      houseMembers: [],
+    }
+  },
 
   computed: {
     currentUser() {
@@ -188,42 +174,34 @@ houseMembers: [],
   },
 
   methods: {
-
     async fetchHouseholdMembers() {
-  if (!this.householdCode) {
-    this.message = 'No household found. Please login again.'
-    return
-  }
+      if (!this.householdCode) {
+        this.message = 'No household found. Please login again.'
+        return
+      }
 
-  try {
-    const res = await axios.get(
-      `${API_BASE}/households/${this.householdCode}/members`
-    )
+      try {
+        const res = await axios.get(`${API_BASE}/households/${this.householdCode}/members`)
 
-    const members = (res.data || [])
-      .map((member) => {
-        if (typeof member === 'string') {
-          return member
-        }
+        const members = (res.data || [])
+          .map((member) => {
+            if (typeof member === 'string') {
+              return member
+            }
 
-        return member.name || member.email || ''
-      })
-      .filter(Boolean)
+            return member.name || member.email || ''
+          })
+          .filter(Boolean)
 
-    this.houseMembers = [...new Set(members)]
+        this.houseMembers = [...new Set(members)]
 
-    console.log('Household members:', this.houseMembers)
-  } catch (error) {
-    console.error(
-      'Fetch household members error:',
-      error.response?.data || error
-    )
+        console.log('Household members:', this.houseMembers)
+      } catch (error) {
+        console.error('Fetch household members error:', error.response?.data || error)
 
-    this.message =
-      error.response?.data?.message ||
-      'Could not load household members.'
-  }
-},
+        this.message = error.response?.data?.message || 'Could not load household members.'
+      }
+    },
 
     async suggestTask() {
       if (!this.description.trim()) {
@@ -250,43 +228,42 @@ houseMembers: [],
     },
 
     async suggestAssignee() {
-  if (!this.householdCode) {
-    this.message = 'No household found. Please login again.'
-    return
-  }
+      if (!this.householdCode) {
+        this.message = 'No household found. Please login again.'
+        return
+      }
 
-  await this.fetchHouseholdMembers()
+      await this.fetchHouseholdMembers()
 
-  if (this.houseMembers.length === 0) {
-    this.message = 'No household members were found.'
-    return
-  }
+      if (this.houseMembers.length === 0) {
+        this.message = 'No household members were found.'
+        return
+      }
 
-  try {
-    this.assigning = true
-    this.message = ''
+      try {
+        this.assigning = true
+        this.message = ''
 
-    const res = await axios.post(`${API_BASE}/ai/suggest-assignee`, {
-      householdCode: this.householdCode,
-      members: this.houseMembers,
-      taskPriority: this.suggestion?.priority || 'Medium',
-    })
+        const res = await axios.post(`${API_BASE}/ai/suggest-assignee`, {
+          householdCode: this.householdCode,
+          members: this.houseMembers,
+          taskPriority: this.suggestion?.priority || 'Medium',
+          taskCategory: this.suggestion?.category || 'General',
+        })
 
-    this.suggestedAssignee = res.data.suggestedAssignee
-    this.assignmentReason = res.data.assignmentReason
-    this.assignmentWorkload = res.data.workload || {}
+        this.suggestedAssignee = res.data.suggestedAssignee
+        this.assignmentReason = res.data.assignmentReason
+        this.assignmentWorkload = res.data.workload || {}
 
-    this.showToast('AI selected the fairest assignee!', 'success')
-  } catch (error) {
-    console.error('Suggest assignee error:', error.response?.data || error)
+        this.showToast('AI selected the fairest assignee!', 'success')
+      } catch (error) {
+        console.error('Suggest assignee error:', error.response?.data || error)
 
-    this.message =
-      error.response?.data?.message ||
-      'Unable to suggest an assignee.'
-  } finally {
-    this.assigning = false
-  }
-},
+        this.message = error.response?.data?.message || 'Unable to suggest an assignee.'
+      } finally {
+        this.assigning = false
+      }
+    },
 
     async createChore() {
       if (!this.suggestion) return
@@ -299,8 +276,12 @@ houseMembers: [],
           title: this.suggestion.title,
           description: this.suggestion.description,
           location: this.suggestion.location,
+          category: this.suggestion.category || 'General',
           priority: this.suggestion.priority,
           priorityReason: this.suggestion.priorityReason,
+
+          source: 'AI Assistant',
+
           householdCode: this.householdCode,
           createdBy: this.currentUser || 'AI Assistant',
           assignedTo: this.suggestedAssignee || '',
@@ -308,7 +289,6 @@ houseMembers: [],
           frequency: 'once',
           dueDate: this.todayDate(),
         })
-
         this.showToast('Task added to chores successfully!', 'success')
         this.clearAssistant()
       } catch (error) {
@@ -320,21 +300,21 @@ houseMembers: [],
     },
 
     dismissSuggestion() {
-  this.suggestion = null
-  this.suggestedAssignee = ''
-  this.assignmentReason = ''
-  this.assignmentWorkload = {}
-  this.message = ''
-},
+      this.suggestion = null
+      this.suggestedAssignee = ''
+      this.assignmentReason = ''
+      this.assignmentWorkload = {}
+      this.message = ''
+    },
 
     clearAssistant() {
-  this.description = ''
-  this.suggestion = null
-  this.suggestedAssignee = ''
-  this.assignmentReason = ''
-  this.assignmentWorkload = {}
-  this.message = ''
-},
+      this.description = ''
+      this.suggestion = null
+      this.suggestedAssignee = ''
+      this.assignmentReason = ''
+      this.assignmentWorkload = {}
+      this.message = ''
+    },
 
     todayDate() {
       const d = new Date()
@@ -351,7 +331,7 @@ houseMembers: [],
     },
   },
 
-   mounted() {
+  mounted() {
     this.fetchHouseholdMembers()
   },
 }

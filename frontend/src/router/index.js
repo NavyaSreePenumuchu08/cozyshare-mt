@@ -8,6 +8,7 @@ import Groceries from '../pages/Groceries.vue'
 import Expenses from '../pages/Expenses.vue'
 import Login from '../pages/Login.vue'
 import AIAssistant from "../pages/AIAssistant.vue";
+import ARAssistant from '../pages/ARAssistant.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -41,6 +42,11 @@ const router = createRouter({
       name: "AIAssistant",
       component: AIAssistant
    },
+   {
+  path: '/ar-assistant',
+  name: 'ARAssistant',
+  component: ARAssistant,
+},
   ],
 })
 

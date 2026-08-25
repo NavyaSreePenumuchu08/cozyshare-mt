@@ -29,6 +29,24 @@ const choreSchema = new mongoose.Schema(
   default: "General"
 },
 
+category: {
+  type: String,
+  enum: [
+    'Kitchen',
+    'Laundry',
+    'Cleaning',
+    'Bathroom',
+    'Gardening',
+    'Groceries',
+    'Maintenance',
+    'Bills',
+    'Bedroom',
+    'Pet Care',
+    'General',
+  ],
+  default: 'General',
+},
+
 priority: {
   type: String,
   enum: ["Low", "Medium", "High"],

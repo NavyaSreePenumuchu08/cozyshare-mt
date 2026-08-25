@@ -24,6 +24,9 @@
         <li>
           <router-link to="/ai-assistant" active-class="active">AI Assistant</router-link>
         </li>
+        <li>
+          <router-link to="/ar-assistant" active-class="active">AR Assistant</router-link>
+        </li>
       </ul>
     </nav>
 
