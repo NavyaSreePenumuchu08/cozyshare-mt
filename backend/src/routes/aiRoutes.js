@@ -110,7 +110,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Clean the floor";
       suggestedLocation = "Living room";
       priority = "Medium";
-      taskCategory = "Living Room";
+      taskCategory = "Cleaning";
       reason =
         "Cleaning the floor improves comfort, hygiene, and shared living cleanliness.";
     } else if (
@@ -153,7 +153,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Tidy the living room";
       suggestedLocation = "Living room";
       priority = "Medium";
-      taskCategory = "Living Room";
+      taskCategory = "Cleaning";
       reason =
         "The living room is a shared space, so keeping it tidy improves household comfort.";
     } else if (
@@ -169,7 +169,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Take care of plants or garden";
       suggestedLocation = "Garden/Balcony";
       priority = "Medium";
-      taskCategory = "Garden";
+      taskCategory = "Gardening";
       reason =
         "Plants and garden areas need regular care to stay healthy and clean.";
     } else if (
@@ -187,7 +187,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Update grocery list";
       suggestedLocation = "Kitchen";
       priority = "Low";
-      taskCategory = "Grocery";
+      taskCategory = "Groceries";
       reason =
         "Grocery updates help household planning but are usually not immediately urgent.";
     } else if (
@@ -202,7 +202,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Buy missing household items";
       suggestedLocation = "General";
       priority = "Medium";
-      taskCategory = "Grocery";
+      taskCategory = "Groceries";
       reason =
         "Missing essential items should be handled soon to avoid household inconvenience.";
     } else if (
@@ -217,7 +217,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Check and pay household bill";
       suggestedLocation = "General";
       priority = "High";
-      taskCategory = "General";
+      taskCategory = "Bills";
       reason =
         "Bills with due dates are important and delays can cause penalties or service issues.";
     } else if (
@@ -233,7 +233,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Report or fix maintenance issue";
       suggestedLocation = "General";
       priority = "High";
-      taskCategory = "General";
+      taskCategory = "Maintenance";
       reason =
         "Maintenance issues can affect safety, comfort, or daily household use.";
     } else if (
@@ -271,7 +271,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Take care of pet-related task";
       suggestedLocation = "General";
       priority = "High";
-      taskCategory = "General";
+      taskCategory = "Pet Care";
       reason =
         "Pet care tasks are time-sensitive and important for animal hygiene and wellbeing.";
     } else if (
@@ -284,7 +284,7 @@ router.post("/suggest-task", async (req, res) => {
       taskTitle = "Prepare shared space for guests";
       suggestedLocation = "Living room";
       priority = "Medium";
-      taskCategory = "Living Room";
+      taskCategory = "Cleaning";
       reason =
         "Preparing shared spaces before guests arrive improves comfort and presentation.";
     } else {
