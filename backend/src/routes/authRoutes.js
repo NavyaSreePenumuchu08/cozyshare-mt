@@ -1,5 +1,5 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
+
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -7,13 +7,9 @@ const User = require("../models/User");
 const Household = require("../models/Household");
 
 const JWT_SECRET = process.env.JWT_SECRET || "cozyshare_secret";
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // helper to generate a simple invite code
 function generateHouseholdCode() {
@@ -47,11 +43,9 @@ router.post("/register", async (req, res) => {
     // 2) create new household
     if (mode === "create") {
       if (!householdName) {
-        return res
-          .status(400)
-          .json({
-            message: "Household name is required to create a household",
-          });
+        return res.status(400).json({
+          message: "Household name is required to create a household",
+        });
       }
 
       // generate unique code
@@ -117,9 +111,9 @@ router.post("/register", async (req, res) => {
     });
     try {
       if (user.householdCode) {
-        await transporter.sendMail({
-          from: `"CozyShare" <${process.env.EMAIL_USER}>`,
-          to: user.email,
+        const { error } = await resend.emails.send({
+          from: "CozyShare <onboarding@resend.dev>",
+          to: [user.email],
           subject: "Welcome to CozyShare 🏠",
           html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
@@ -152,12 +146,15 @@ router.post("/register", async (req, res) => {
       `,
         });
 
-        console.log("Welcome email sent to:", user.email);
+        if (error) {
+          console.error("Welcome email error:", error);
+        } else {
+          console.log("Welcome email sent to:", user.email);
+        }
       }
     } catch (emailError) {
       console.error("Welcome email error:", emailError.message);
     }
-
     res.status(201).json({
       user: {
         id: user._id,
