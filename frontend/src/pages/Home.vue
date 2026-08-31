@@ -843,12 +843,37 @@ export default {
           latitude = position.coords.latitude
           longitude = position.coords.longitude
         } catch (locationError) {
-          console.warn('Could not get user location, using Heidelberg fallback:', locationError)
+          console.warn('GPS location unavailable. Trying approximate location:', locationError)
 
-          // Fallback
-          latitude = 49.3988
-          longitude = 8.6724
-          locationName = 'Heidelberg'
+          try {
+            const locationResponse = await axios.get(
+              'https://api.bigdatacloud.net/data/reverse-geocode-client',
+              {
+                params: {
+                  localityLanguage: 'en',
+                },
+              },
+            )
+
+            latitude = locationResponse.data.latitude
+            longitude = locationResponse.data.longitude
+
+            locationName =
+              locationResponse.data.city ||
+              locationResponse.data.locality ||
+              locationResponse.data.principalSubdivision ||
+              locationResponse.data.countryName ||
+              'Current location'
+
+            console.log('Approximate location:', locationName, latitude, longitude)
+          } catch (fallbackError) {
+            console.error('Could not determine location:', fallbackError)
+
+            this.weatherError =
+              'Could not determine your location. Please enable location permission.'
+
+            return
+          }
         }
 
         const response = await axios.get('https://api.open-meteo.com/v1/forecast', {
@@ -952,18 +977,21 @@ export default {
       try {
         this.weatherSuggestionLoading = true
 
-        const response = await axios.post('https://cozyshare-mt-backend.onrender.com/api/ai/weather-suggestion', {
-          location: this.weather.location,
-          temperature: this.weather.temperature,
-          feelsLike: this.weather.feelsLike,
-          humidity: this.weather.humidity,
-          precipitation: this.weather.precipitation,
-          rain: this.weather.rain,
-          windSpeed: this.weather.windSpeed,
-          condition: this.weatherDescription,
-          rainProbability: this.weather.rainProbability,
-          rainExpectedSoon: this.weather.rainExpectedSoon,
-        })
+        const response = await axios.post(
+          'https://cozyshare-mt-backend.onrender.com/api/ai/weather-suggestion',
+          {
+            location: this.weather.location,
+            temperature: this.weather.temperature,
+            feelsLike: this.weather.feelsLike,
+            humidity: this.weather.humidity,
+            precipitation: this.weather.precipitation,
+            rain: this.weather.rain,
+            windSpeed: this.weather.windSpeed,
+            condition: this.weatherDescription,
+            rainProbability: this.weather.rainProbability,
+            rainExpectedSoon: this.weather.rainExpectedSoon,
+          },
+        )
 
         this.weatherSuggestion = response.data.suggestion || ''
       } catch (error) {
