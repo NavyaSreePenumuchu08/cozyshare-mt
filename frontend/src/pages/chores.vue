@@ -448,7 +448,7 @@ export default {
       if (!this.householdCode) return
       this.isLoading = true
       try {
-        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/chores', {
+        const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/chores', {
           params: { householdCode: this.householdCode },
         })
         this.allChores = res.data || []
@@ -498,7 +498,7 @@ export default {
           createdBy: this.currentUser,
         }
 
-        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/chores', body)
+        const res = await axios.post(' https://cozyshare-mt-backend.onrender.com/api/chores', body)
         this.allChores.push(res.data)
         this.closeModal()
         this.showToast('Chore added successfully!', 'success')
@@ -526,7 +526,7 @@ export default {
 
       try {
         const res = await axios.patch(
-          ` https://cozyshare-backend.onrender.com/api/chores/${chore._id}/complete`,
+          ` https://cozyshare-mt-backend.onrender.com/api/chores/${chore._id}/complete`,
           {
             currentUser: this.currentUser,
           },
@@ -569,7 +569,7 @@ export default {
 
       try {
         const res = await axios.patch(
-          ` https://cozyshare-backend.onrender.com/api/chores/${choreId}/complete`,
+          ` https://cozyshare-mt-backend.onrender.com/api/chores/${choreId}/complete`,
           {
             currentUser: this.currentUser,
           },

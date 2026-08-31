@@ -596,7 +596,7 @@ export default {
     async fetchNotices() {
       if (!this.householdCode) return
 
-      const res = await axios.get(' https://cozyshare-backend.onrender.com/api/notices', {
+      const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/notices', {
         params: { householdCode: this.householdCode },
       })
 
@@ -609,7 +609,7 @@ export default {
 
     async fetchGroceries() {
       if (!this.householdCode) return
-      const res = await axios.get(' https://cozyshare-backend.onrender.com/api/groceries', {
+      const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/groceries', {
         params: { householdCode: this.householdCode },
       })
       this.allGroceries = res.data || []
@@ -617,7 +617,7 @@ export default {
 
     async fetchChores() {
       if (!this.householdCode) return
-      const res = await axios.get(' https://cozyshare-backend.onrender.com/api/chores', {
+      const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/chores', {
         params: { householdCode: this.householdCode },
       })
       this.allChores = res.data || []
@@ -625,7 +625,7 @@ export default {
 
     async fetchExpenses() {
       if (!this.householdCode) return
-      const res = await axios.get(' https://cozyshare-backend.onrender.com/api/expenses', {
+      const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/expenses', {
         params: { householdCode: this.householdCode },
       })
       this.allExpenses = res.data || []
@@ -679,7 +679,7 @@ export default {
           author,
         }
 
-        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/notices', body)
+        const res = await axios.post(' https://cozyshare-mt-backend.onrender.com/api/notices', body)
 
         const saved = res.data || {}
 
@@ -722,7 +722,7 @@ export default {
       // persist to backend so it won't disappear on tab switch
       try {
         const res = await axios.patch(
-          ` https://cozyshare-backend.onrender.com/api/notices/${id}/like`,
+          ` https://cozyshare-mt-backend.onrender.com/api/notices/${id}/like`,
           {
             user: me,
           },
@@ -754,7 +754,7 @@ export default {
       // persist to backend so it won't disappear
       try {
         const res = await axios.post(
-          ` https://cozyshare-backend.onrender.com/api/notices/${id}/comments`,
+          ` https://cozyshare-mt-backend.onrender.com/api/notices/${id}/comments`,
           {
             author,
             text,
@@ -780,7 +780,7 @@ export default {
       if (newTitle === null || newMessage === null) return
 
       try {
-        await axios.put(` https://cozyshare-backend.onrender.com/api/notices/${notice._id}`, {
+        await axios.put(` https://cozyshare-mt-backend.onrender.com/api/notices/${notice._id}`, {
           title: newTitle,
           message: newMessage,
         })
@@ -804,7 +804,7 @@ export default {
       this.notices = this.notices.filter((n) => n._id !== id)
 
       try {
-        await axios.delete(` https://cozyshare-backend.onrender.com/api/notices/${id}`, {
+        await axios.delete(` https://cozyshare-mt-backend.onrender.com/api/notices/${id}`, {
           data: { user: me }, //  backend needs this for "only author can delete"
         })
       } catch (err) {
@@ -952,7 +952,7 @@ export default {
       try {
         this.weatherSuggestionLoading = true
 
-        const response = await axios.post('http://localhost:5000/api/ai/weather-suggestion', {
+        const response = await axios.post('https://cozyshare-mt-backend.onrender.com/api/ai/weather-suggestion', {
           location: this.weather.location,
           temperature: this.weather.temperature,
           feelsLike: this.weather.feelsLike,

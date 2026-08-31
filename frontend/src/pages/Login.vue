@@ -165,7 +165,7 @@ export default {
       }
 
       try {
-        const res = await axios.post('https://cozyshare-backend.onrender.com/api/auth/login', {
+        const res = await axios.post('https://cozyshare-mt-backend.onrender.com/api/auth/login', {
           email: this.email,
           password: this.password,
         })
@@ -239,7 +239,7 @@ export default {
         }
 
         const res = await axios.post(
-          'https://cozyshare-backend.onrender.com/api/auth/register',
+          'https://cozyshare-mt-backend.onrender.com/api/auth/register',
           body,
         )
 

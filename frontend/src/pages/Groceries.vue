@@ -313,7 +313,7 @@ export default {
       if (!this.householdCode) return
       this.isLoading = true
       try {
-        const res = await axios.get(' https://cozyshare-backend.onrender.com/api/groceries', {
+        const res = await axios.get(' https://cozyshare-mt-backend.onrender.com/api/groceries', {
           params: { householdCode: this.householdCode },
         })
         this.groceries = res.data || []
@@ -329,7 +329,7 @@ export default {
       this.isLoadingHistory = true
       try {
         const res = await axios.get(
-          ' https://cozyshare-backend.onrender.com/api/groceries/history',
+          ' https://cozyshare-mt-backend.onrender.com/api/groceries/history',
           {
             params: { householdCode: this.householdCode, limit: 50 },
           },
@@ -380,7 +380,7 @@ export default {
           addedBy: this.currentUser.name || this.currentUser.email,
         }
 
-        const res = await axios.post(' https://cozyshare-backend.onrender.com/api/groceries', body)
+        const res = await axios.post(' https://cozyshare-mt-backend.onrender.com/api/groceries', body)
         this.groceries.push(res.data)
 
         this.closeModal()
@@ -425,7 +425,7 @@ export default {
 
       try {
         const res = await axios.patch(
-          ` https://cozyshare-backend.onrender.com/api/groceries/${id}/toggle`,
+          ` https://cozyshare-mt-backend.onrender.com/api/groceries/${id}/toggle`,
           {
             currentUser: this.currentUser.name || this.currentUser.email,
           },
@@ -452,7 +452,7 @@ export default {
       }
 
       try {
-        await axios.delete(` https://cozyshare-backend.onrender.com/api/groceries/${id}`)
+        await axios.delete(` https://cozyshare-mt-backend.onrender.com/api/groceries/${id}`)
         this.groceries = this.groceries.filter((g) => g._id !== id)
       } catch (err) {
         console.error('Delete grocery error', err)
