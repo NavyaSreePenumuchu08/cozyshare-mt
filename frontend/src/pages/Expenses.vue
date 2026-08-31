@@ -11,7 +11,7 @@
       <div class="card summary-card">
         <div class="summary-icon" style="background: #d4f1f0">💵</div>
         <div class="summary-content">
-          <h3>€{{ yourTotalExpenses.toFixed(2) }}</h3>
+          <h3>{{ currencySymbol }}{{ yourTotalExpenses.toFixed(2) }}</h3>
           <p>You Paid This Month</p>
         </div>
       </div>
@@ -19,7 +19,7 @@
       <div class="card summary-card">
         <div class="summary-icon" style="background: #fef8ec">💤</div>
         <div class="summary-content">
-          <h3>€{{ yourShare.toFixed(2) }}</h3>
+          <h3>{{ currencySymbol }}{{ yourShare.toFixed(2) }}</h3>
           <p>Your Share</p>
         </div>
       </div>
@@ -32,7 +32,7 @@
           {{ youOwe > 0 ? '📤' : '📥' }}
         </div>
         <div class="summary-content">
-          <h3>€{{ Math.abs(youOwe).toFixed(2) }}</h3>
+          <h3>{{ currencySymbol }}{{ Math.abs(youOwe).toFixed(2) }}</h3>
           <p>{{ youOwe > 0 ? 'You Owe Others' : 'Others Owe You' }}</p>
         </div>
       </div>
@@ -93,7 +93,7 @@
                   settlement.to
                 }}</strong>
               </p>
-              <p class="settlement-amount">€{{ settlement.amount.toFixed(2) }}</p>
+              <p class="settlement-amount">{{ currencySymbol }}{{ settlement.amount.toFixed(2) }}</p>
             </div>
             <button class="settle-btn" @click="settlePayment(settlement.id)">✓ Settle Up</button>
           </div>
@@ -120,7 +120,7 @@
                   ><strong>{{ payment.from }}</strong> paid you</template
                 >
               </p>
-              <p class="history-amount">€{{ Number(payment.amount).toFixed(2) }}</p>
+              <p class="history-amount">{{ currencySymbol }}{{ Number(payment.amount).toFixed(2) }}</p>
               <p class="history-date">{{ formatDate(payment.createdAt) }}</p>
             </div>
 
@@ -160,18 +160,39 @@
             <div class="form-row two-cols">
               <div class="form-control">
                 <label>Amount *</label>
-                <div class="input-with-icon">
-                  <span class="currency-icon">€</span>
-                  <input
-                    v-model.number="form.amount"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    placeholder="0.00"
-                    required
-                    class="amount-input"
-                  />
+
+                <div class="amount-currency-row">
+                  <div class="input-with-icon amount-field">
+                    <span class="currency-icon">
+                      {{ formCurrencySymbol }}
+                    </span>
+
+                    <input
+                      v-model.number="form.amount"
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="0.00"
+                      required
+                      class="amount-input"
+                    />
+                  </div>
+
+                  <select
+                    v-model="form.currency"
+                    class="select-input currency-select"
+                    :disabled="expenses.length > 0"
+                  >
+                    <option value="EUR">EUR €</option>
+                    <option value="USD">USD $</option>
+                    <option value="GBP">GBP £</option>
+                    <option value="INR">INR ₹</option>
+                  </select>
                 </div>
+
+                <p v-if="expenses.length > 0" class="currency-helper">
+                  Household currency: {{ householdCurrency }}
+                </p>
               </div>
 
               <div class="form-control">
@@ -250,7 +271,7 @@
               <div class="split-summary">
                 <div class="split-row">
                   <span class="split-label">Total Amount:</span>
-                  <span class="split-value">€{{ form.amount.toFixed(2) }}</span>
+                  <span class="split-value">{{ formCurrencySymbol }}{{ form.amount.toFixed(2) }}</span>
                 </div>
                 <div class="split-row">
                   <span class="split-label">Split Between:</span>
@@ -261,7 +282,7 @@
                 </div>
                 <div class="split-row highlight">
                   <span class="split-label">Each Person Pays:</span>
-                  <span class="split-value-large">€{{ perPersonAmount.toFixed(2) }}</span>
+                  <span class="split-value-large">{{ formCurrencySymbol }}{{ perPersonAmount.toFixed(2) }}</span>
                 </div>
               </div>
               <div class="split-members">
@@ -322,6 +343,7 @@ export default {
       form: {
         title: '',
         amount: 0,
+        currency: 'EUR',
         paidBy: '',
         type: 'one-time',
         purchaseDate: '',
@@ -469,6 +491,34 @@ export default {
     isAllSelected() {
       return this.form.splitWith.length === this.houseMembers.length && this.houseMembers.length > 0
     },
+
+    householdCurrency() {
+      const existingExpense = this.expenses.find((expense) => expense.currency)
+
+      return existingExpense?.currency || 'EUR'
+    },
+
+    currencySymbol() {
+      const symbols = {
+        EUR: '€',
+        USD: '$',
+        GBP: '£',
+        INR: '₹',
+      }
+
+      return symbols[this.householdCurrency] || this.householdCurrency
+    },
+
+    formCurrencySymbol() {
+      const symbols = {
+        EUR: '€',
+        USD: '$',
+        GBP: '£',
+        INR: '₹',
+      }
+
+      return symbols[this.form.currency] || this.form.currency
+    },
   },
   watch: {
     householdCode(newVal) {
@@ -543,6 +593,7 @@ export default {
       this.form = {
         title: '',
         amount: 0,
+        currency: this.householdCurrency,
         paidBy: '',
         type: 'one-time',
         purchaseDate: '',
@@ -582,7 +633,10 @@ export default {
           dueDate: this.form.dueDate || null,
           householdCode: this.householdCode,
         }
-        const res = await axios.post(' https://cozyshare-mt-backend.onrender.com/api/expenses', body)
+        const res = await axios.post(
+          ' https://cozyshare-mt-backend.onrender.com/api/expenses',
+          body,
+        )
         this.expenses.unshift(res.data)
         this.closeModal()
         this.showToast('Bill added successfully!', 'success')
@@ -622,9 +676,7 @@ export default {
         await this.fetchSettlements()
 
         this.showToast(
-          `Settlement saved: ${settlement.from} → ${settlement.to} €${settlement.amount.toFixed(
-            2,
-          )}`,
+          `Settlement saved: ${settlement.from} → ${settlement.to} ${this.currencySymbol}${settlement.amount.toFixed(2)}`,
           'success',
         )
       } catch (err) {
@@ -1094,6 +1146,31 @@ export default {
   padding-left: 36px !important;
 }
 
+.amount-currency-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 10px;
+}
+
+.amount-field {
+  min-width: 0;
+}
+
+.currency-select {
+  min-width: 110px;
+}
+
+.currency-helper {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
+@media (max-width: 480px) {
+  .amount-currency-row {
+    grid-template-columns: 1fr;
+  }
+}
 .split-selection-header {
   display: flex;
   justify-content: space-between;

@@ -13,7 +13,9 @@
       <div class="expense-details">
         <div class="detail-item">
           <span class="label">Amount:</span>
-          <span class="value amount">€{{ Number(expense.amount || 0).toFixed(2) }}</span>
+          <span class="value amount"
+            >{{ currencySymbol }}{{ Number(expense.amount || 0).toFixed(2) }}</span
+          >
         </div>
 
         <div class="detail-item">
@@ -26,7 +28,9 @@
 
         <div class="detail-item">
           <span class="label">Your share:</span>
-          <span class="value share"> €{{ Number(yourShare || 0).toFixed(2) }} </span>
+          <span class="value share">
+            {{ currencySymbol }}{{ Number(yourShare || 0).toFixed(2) }}
+          </span>
         </div>
 
         <div class="detail-item">
@@ -85,6 +89,17 @@ export default {
         return 0
       }
       return this.expense.perPerson || 0
+    },
+
+    currencySymbol() {
+      const symbols = {
+        EUR: '€',
+        USD: '$',
+        GBP: '£',
+        INR: '₹',
+      }
+
+      return symbols[this.expense.currency] || '€'
     },
 
     typeIcon() {

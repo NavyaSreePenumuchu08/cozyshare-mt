@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
 		const {
 			title,
 			amount,
+			currency,
 			paidBy,
 			splitWith,
 			type,
@@ -35,6 +36,7 @@ router.post("/", async (req, res) => {
 		const expense = await Expense.create({
 			title,
 			amount,
+			currency: currency || "EUR",
 			paidBy,
 			splitWith,
 			perPerson,

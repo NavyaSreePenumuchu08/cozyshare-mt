@@ -53,7 +53,7 @@
       <form v-else class="form" @submit.prevent="submitRegister">
         <div class="form-control">
           <label>Name</label>
-          <input v-model.trim="name" type="text" placeholder="Navya" required />
+          <input v-model.trim="name" type="text" placeholder="Paul Tanzer" required />
         </div>
 
         <div class="form-control">
